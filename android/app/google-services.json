@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1087034404999",
+    "project_id": "flutter-money-management",
+    "storage_bucket": "flutter-money-management.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1087034404999:android:b63c03ccc103ff31660822",
+        "android_client_info": {
+          "package_name": "com.example.money_management"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwuV96kswkC31TpXMuVVKOXbNhpTQ-OkA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

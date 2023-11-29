@@ -1,0 +1,16 @@
+import 'package:money_management/features/core/domain/user.dart';
+import 'package:money_management/features/login/domain/login_repository.dart';
+
+class DummyLoginRepository extends LoginRepository {
+  @override
+  Future<User> login({
+    required String email,
+    required String password,
+  }) async {
+    return User(
+      uid: '1',
+      name: 'John Doe',
+      email: email,
+    );
+  }
+}
