@@ -7,6 +7,8 @@ part 'user_profile.g.dart';
 class UserProfile with _$UserProfile {
   const factory UserProfile({
     required String uid,
+    required String name,
+    required String email,
     required String? phone,
   }) = _UserProfile;
 

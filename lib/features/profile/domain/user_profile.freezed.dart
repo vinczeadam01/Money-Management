@@ -21,6 +21,8 @@ UserProfile _$UserProfileFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$UserProfile {
   String get uid => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
+  String get email => throw _privateConstructorUsedError;
   String? get phone => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -35,7 +37,7 @@ abstract class $UserProfileCopyWith<$Res> {
           UserProfile value, $Res Function(UserProfile) then) =
       _$UserProfileCopyWithImpl<$Res, UserProfile>;
   @useResult
-  $Res call({String uid, String? phone});
+  $Res call({String uid, String name, String email, String? phone});
 }
 
 /// @nodoc
@@ -52,12 +54,22 @@ class _$UserProfileCopyWithImpl<$Res, $Val extends UserProfile>
   @override
   $Res call({
     Object? uid = null,
+    Object? name = null,
+    Object? email = null,
     Object? phone = freezed,
   }) {
     return _then(_value.copyWith(
       uid: null == uid
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
+              as String,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      email: null == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
               as String,
       phone: freezed == phone
           ? _value.phone
@@ -75,7 +87,7 @@ abstract class _$$UserProfileImplCopyWith<$Res>
       __$$UserProfileImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String uid, String? phone});
+  $Res call({String uid, String name, String email, String? phone});
 }
 
 /// @nodoc
@@ -90,12 +102,22 @@ class __$$UserProfileImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? uid = null,
+    Object? name = null,
+    Object? email = null,
     Object? phone = freezed,
   }) {
     return _then(_$UserProfileImpl(
       uid: null == uid
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
+              as String,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      email: null == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
               as String,
       phone: freezed == phone
           ? _value.phone
@@ -108,7 +130,11 @@ class __$$UserProfileImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$UserProfileImpl implements _UserProfile {
-  const _$UserProfileImpl({required this.uid, required this.phone});
+  const _$UserProfileImpl(
+      {required this.uid,
+      required this.name,
+      required this.email,
+      required this.phone});
 
   factory _$UserProfileImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserProfileImplFromJson(json);
@@ -116,11 +142,15 @@ class _$UserProfileImpl implements _UserProfile {
   @override
   final String uid;
   @override
+  final String name;
+  @override
+  final String email;
+  @override
   final String? phone;
 
   @override
   String toString() {
-    return 'UserProfile(uid: $uid, phone: $phone)';
+    return 'UserProfile(uid: $uid, name: $name, email: $email, phone: $phone)';
   }
 
   @override
@@ -129,12 +159,14 @@ class _$UserProfileImpl implements _UserProfile {
         (other.runtimeType == runtimeType &&
             other is _$UserProfileImpl &&
             (identical(other.uid, uid) || other.uid == uid) &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.email, email) || other.email == email) &&
             (identical(other.phone, phone) || other.phone == phone));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, uid, phone);
+  int get hashCode => Object.hash(runtimeType, uid, name, email, phone);
 
   @JsonKey(ignore: true)
   @override
@@ -153,6 +185,8 @@ class _$UserProfileImpl implements _UserProfile {
 abstract class _UserProfile implements UserProfile {
   const factory _UserProfile(
       {required final String uid,
+      required final String name,
+      required final String email,
       required final String? phone}) = _$UserProfileImpl;
 
   factory _UserProfile.fromJson(Map<String, dynamic> json) =
@@ -160,6 +194,10 @@ abstract class _UserProfile implements UserProfile {
 
   @override
   String get uid;
+  @override
+  String get name;
+  @override
+  String get email;
   @override
   String? get phone;
   @override

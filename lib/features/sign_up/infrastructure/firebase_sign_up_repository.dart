@@ -12,6 +12,7 @@ class FirebaseSignUpRepository extends SignUpRepository {
       password: signUpForm.password,
     );
     await credential.user?.updateDisplayName(signUpForm.name);
+    
     return core.User(
       uid: credential.user!.uid,
       name: signUpForm.name,

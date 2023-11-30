@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:money_management/features/auth/application/auth_controller.dart';
 import 'package:money_management/features/core/domain/user.dart';
+import 'package:money_management/features/profile/application/profile_controller.dart';
+import 'package:money_management/features/profile/infrastructure/providers.dart';
 import 'package:money_management/features/sign_up/domain/sign_up_form.dart';
 import 'package:money_management/features/sign_up/infrastructure/providers.dart';
 
@@ -38,6 +40,7 @@ class SignUpController extends Notifier<SignUpForm> {
     final user = await ref.read(signUpRepositoryProvider).signUp(
           signUpForm: state,
         );
+    await ref.read(profileRepositoryProvider).create(user.uid, state.name, state.email);
     await ref.read(authControllerProvider.notifier).signInWithEmailAndPassword(
           email: state.email,
           password: state.password,

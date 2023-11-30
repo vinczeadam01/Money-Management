@@ -14,7 +14,7 @@ class ProfileController extends AsyncNotifier<UserProfile> {
     return switch (user) {
       Unknown() ||
       Unauthenticated() =>
-        const UserProfile(uid: '', phone: ''),
+        const UserProfile(uid: '', phone: '', name: '', email: ''),
       Authenticated(:final user) =>
         await profileRepository.getProfile(user.uid),
     };

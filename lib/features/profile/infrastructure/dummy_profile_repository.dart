@@ -6,14 +6,19 @@ class DummyProfileRepository extends ProfileRepository {
   Future<UserProfile> getProfile(String uid) async {
     return const UserProfile(
       uid: '1',
-      phone: '+36301234567',
-
+      name: 'John Doe',
+      email: 'john.doe@mail.com',
+      phone: '081234567890',
     );
   }
 
   @override
-  Future<UserProfile> create(String uid) async {
-    return UserProfile(uid: uid, phone: '');
+  Future<UserProfile> create(String uid, String name, String email) async {
+    return UserProfile(
+      uid: uid,
+      name: name,
+      email: email, 
+      phone: '');
   }
 
   @override

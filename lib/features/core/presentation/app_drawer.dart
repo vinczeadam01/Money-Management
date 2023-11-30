@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:money_management/features/auth/application/auth_controller.dart';
 import 'package:money_management/features/auth/domain/auth_state.dart';
+import 'package:money_management/features/profile/presentation/profile_avatar.dart';
 
 class AppDrawer extends ConsumerWidget {
   const AppDrawer({super.key});
@@ -28,23 +29,45 @@ class AppDrawer extends ConsumerWidget {
             ),
           ],
           if (authState case Authenticated(:final user)) ...[
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
+            UserAccountsDrawerHeader(
+              decoration: const BoxDecoration(color: Colors.blue),
+              accountName: Text(
+                user.name,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              child: Text('Drawer Header'),
+              accountEmail: Text(
+                user.email,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              currentAccountPicture: const ProfileAvatar(),
             ),
             ListTile(
-              title: Text('Welcome ${user.name}!'),
+              leading: const Icon(Icons.home),
+              title: const Text('Home'),
+              onTap: () {
+                context.go('/home');
+              },
             ),
-            const Divider(),
+             ListTile(
+              leading: const Icon(Icons.people),
+              title: const Text('Friends'),
+              onTap: () {
+                context.go('/friends');
+              },
+            ),
             ListTile(
+              leading: const Icon(Icons.person),
               title: const Text('Profile'),
               onTap: () {
                 context.go('/profile');
               },
             ),
             ListTile(
+              leading: const Icon(Icons.logout),
               title: const Text('Logout'),
               onTap: () {
                 ref.read(authControllerProvider.notifier).signOut();

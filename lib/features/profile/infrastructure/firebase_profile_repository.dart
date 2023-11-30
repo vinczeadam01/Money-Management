@@ -8,8 +8,13 @@ class FirebaseProfileRepository extends ProfileRepository {
   final _db = FirebaseFirestore.instance;
 
   @override
-  Future<UserProfile> create(String uid) async {
-    final profile = UserProfile(uid: uid, phone: '');
+  Future<UserProfile> create(String uid, String name, String email) async {
+    final profile = UserProfile(
+      uid: uid,
+      name: name,
+      email: email, 
+      phone: ''
+    );
     await _db
         .collection(_userProfileCollection)
         .withConverter(
@@ -31,7 +36,7 @@ class FirebaseProfileRepository extends ProfileRepository {
         .get();
     final profile = snapshot.data();
     if (profile == null) {
-      return create(uid);
+      throw Exception('Profile not found');
     }
     return profile;
   }

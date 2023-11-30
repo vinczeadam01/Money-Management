@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:money_management/features/auth/application/auth_controller.dart';
 import 'package:money_management/features/auth/domain/auth_state.dart';
+import 'package:money_management/features/friends/presentation/friends_screen.dart';
 import 'package:money_management/features/login/presentation/login_screen.dart';
 import 'package:money_management/features/profile/presentation/profile_screen.dart';
 import 'package:money_management/features/sign_up/presentation/sign_up_screen.dart';
@@ -58,6 +59,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/home',
         builder: (context, state) => const ProfileScreen(),
+      ),
+      GoRoute(
+        path: '/friends',
+        builder: (context, state) => const FriendsScreen(),
       ),
     ],
   );
