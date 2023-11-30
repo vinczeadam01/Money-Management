@@ -19,7 +19,7 @@ class LoginScreen extends ConsumerWidget {
           content: Text('Welcome back!'),
         ),
       );
-      router.go('/home');
+      router.go('/profile');
     } catch (e) {
       scaffoldMessenger.showSnackBar(
         const SnackBar(
