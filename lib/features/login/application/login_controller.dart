@@ -35,6 +35,13 @@ class LoginController extends Notifier<LoginForm> {
         );
     return user;
   }
+
+  Future<User> loginWithGoogle() async {
+    final user = User(uid: 'asd', name: 'asd', email: 'asd');
+    final userCredential = await ref.read(authControllerProvider.notifier).signInWithGoogle();
+    print(userCredential);
+    return user;
+  }
 }
 
 final loginControllerProvider = NotifierProvider<LoginController, LoginForm>(

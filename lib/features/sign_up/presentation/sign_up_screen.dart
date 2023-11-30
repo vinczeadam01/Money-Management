@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:money_management/features/core/presentation/app_drawer.dart';
 import 'package:money_management/features/core/presentation/email_text_field.dart';
 import 'package:money_management/features/core/presentation/name_text_field.dart';
 import 'package:money_management/features/core/presentation/password_text_field.dart';
@@ -37,6 +38,7 @@ class SignUpScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Sign up'),
       ),
+      drawer: const AppDrawer(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

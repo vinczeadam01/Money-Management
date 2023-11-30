@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:money_management/features/auth/domain/auth_state.dart';
 
 abstract class AuthRepository {
@@ -10,5 +11,6 @@ abstract class AuthRepository {
     required String email,
     required String password,
   });
+  Future<UserCredential> signInWithGoogle();
   Future<void> signOut();
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:money_management/features/auth/domain/auth_state.dart';
 import 'package:money_management/features/auth/infrastructure/providers.dart';
@@ -29,6 +30,10 @@ class AuthController extends Notifier<AuthState> {
           email: email,
           password: password,
         );
+  }
+
+  Future<UserCredential> signInWithGoogle() async {
+    return await ref.read(authRepositoryProvider).signInWithGoogle();
   }
 
   Future<void> signOut() async {

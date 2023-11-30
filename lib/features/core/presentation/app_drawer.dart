@@ -28,6 +28,12 @@ class AppDrawer extends ConsumerWidget {
             ),
           ],
           if (authState case Authenticated(:final user)) ...[
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text('Drawer Header'),
+            ),
             ListTile(
               title: Text('Welcome ${user.name}!'),
             ),
