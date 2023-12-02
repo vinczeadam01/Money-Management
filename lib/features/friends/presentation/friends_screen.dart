@@ -152,19 +152,22 @@ class _FriendListState extends ConsumerState<_FriendList> {
                   return ListTile(
                     title: Text(friend.name),
                     subtitle: Text(friend.email),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
+                    trailing: PopupMenuButton(
+                      itemBuilder: (context) => [
+                        PopupMenuItem(
+                          child: const Text('Delete'),
+                          value: friend,
+                        ),
+                      ],
+                      onSelected: (friend) async {
                         final friendController = ref.read(friendControllerProvider.notifier);
                         friendController.removeFriend(friend.uid);
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Friend removed')),
+                          const SnackBar(content: Text('Friend deleted')),
                         );
-                        setState(() {
-                          widget.friends.removeAt(index);
-                        });
+                        return ref.refresh(friendControllerProvider);
                       },
-                    )
+                    ),
                   );
                 },
               ),

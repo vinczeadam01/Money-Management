@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:money_management/features/auth/application/auth_controller.dart';
 import 'package:money_management/features/auth/domain/auth_state.dart';
@@ -25,7 +28,27 @@ class ExpenseController extends AsyncNotifier<List<Expense>> {
       case Unknown() || Unauthenticated():
         throw const Unauthenticated();
       case Authenticated(:final user):
-        await expenseRepository.addExpense(expense.copyWith(userId: user.uid));
+        await expenseRepository.addExpense(expense.copyWith(
+          userId: user.uid, 
+          createdAt: DateTime.now(),
+          ));
+    }
+  }
+
+  Future<void> deleteExpense(Expense expense) async {
+    final expenseRepository = ref.read(ExpenseRepositoryProvider);
+    await expenseRepository.deleteExpense(expense);
+  }
+
+  Future<String?> uploadReceipt(Uint8List bytes) async {
+     try {
+      String randomId = DateTime.now().millisecondsSinceEpoch.toString();
+      Reference storageReference = FirebaseStorage.instance.ref().child('receipts/$randomId.png');
+
+      await storageReference.putData(bytes);
+      return await storageReference.getDownloadURL();
+    } catch (e) {
+      return null;
     }
   }
 }

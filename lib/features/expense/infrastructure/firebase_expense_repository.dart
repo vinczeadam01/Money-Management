@@ -24,13 +24,14 @@ class FirebaseExpenseRepository extends ExpenseRepository {
   }
 
   @override
-  Future<List<Expense>> getExpenses(String userId) {   
+  Future<List<Expense>> getExpenses(String userId) {
+    // the document id is the uid of the expense
     return _db
       .collection(_expenseCollection)
       .where('userId', isEqualTo: userId)
       .get()
       .then((snapshot) {
-        return snapshot.docs.map((doc) => Expense.fromJson(doc.data())).toList();
+        return snapshot.docs.map((doc) => Expense.fromDoc(doc)).toList();
       });
   }
 

@@ -27,7 +27,8 @@ mixin _$Expense {
   String get category => throw _privateConstructorUsedError;
   double get amount => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
-  List<Map<String, int>>? get share => throw _privateConstructorUsedError;
+  String? get receiptUrl => throw _privateConstructorUsedError;
+  Map<String, int>? get share => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -47,7 +48,8 @@ abstract class $ExpenseCopyWith<$Res> {
       String category,
       double amount,
       DateTime? createdAt,
-      List<Map<String, int>>? share});
+      String? receiptUrl,
+      Map<String, int>? share});
 }
 
 /// @nodoc
@@ -70,6 +72,7 @@ class _$ExpenseCopyWithImpl<$Res, $Val extends Expense>
     Object? category = null,
     Object? amount = null,
     Object? createdAt = freezed,
+    Object? receiptUrl = freezed,
     Object? share = freezed,
   }) {
     return _then(_value.copyWith(
@@ -101,10 +104,14 @@ class _$ExpenseCopyWithImpl<$Res, $Val extends Expense>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      receiptUrl: freezed == receiptUrl
+          ? _value.receiptUrl
+          : receiptUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
       share: freezed == share
           ? _value.share
           : share // ignore: cast_nullable_to_non_nullable
-              as List<Map<String, int>>?,
+              as Map<String, int>?,
     ) as $Val);
   }
 }
@@ -124,7 +131,8 @@ abstract class _$$ExpenseImplCopyWith<$Res> implements $ExpenseCopyWith<$Res> {
       String category,
       double amount,
       DateTime? createdAt,
-      List<Map<String, int>>? share});
+      String? receiptUrl,
+      Map<String, int>? share});
 }
 
 /// @nodoc
@@ -145,6 +153,7 @@ class __$$ExpenseImplCopyWithImpl<$Res>
     Object? category = null,
     Object? amount = null,
     Object? createdAt = freezed,
+    Object? receiptUrl = freezed,
     Object? share = freezed,
   }) {
     return _then(_$ExpenseImpl(
@@ -176,10 +185,14 @@ class __$$ExpenseImplCopyWithImpl<$Res>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      receiptUrl: freezed == receiptUrl
+          ? _value.receiptUrl
+          : receiptUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
       share: freezed == share
           ? _value._share
           : share // ignore: cast_nullable_to_non_nullable
-              as List<Map<String, int>>?,
+              as Map<String, int>?,
     ));
   }
 }
@@ -195,7 +208,8 @@ class _$ExpenseImpl implements _Expense {
       this.category = '',
       required this.amount,
       this.createdAt,
-      final List<Map<String, int>>? share})
+      this.receiptUrl,
+      final Map<String, int>? share})
       : _share = share;
 
   factory _$ExpenseImpl.fromJson(Map<String, dynamic> json) =>
@@ -217,19 +231,21 @@ class _$ExpenseImpl implements _Expense {
   final double amount;
   @override
   final DateTime? createdAt;
-  final List<Map<String, int>>? _share;
   @override
-  List<Map<String, int>>? get share {
+  final String? receiptUrl;
+  final Map<String, int>? _share;
+  @override
+  Map<String, int>? get share {
     final value = _share;
     if (value == null) return null;
-    if (_share is EqualUnmodifiableListView) return _share;
+    if (_share is EqualUnmodifiableMapView) return _share;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
+    return EqualUnmodifiableMapView(value);
   }
 
   @override
   String toString() {
-    return 'Expense(uid: $uid, userId: $userId, name: $name, description: $description, category: $category, amount: $amount, createdAt: $createdAt, share: $share)';
+    return 'Expense(uid: $uid, userId: $userId, name: $name, description: $description, category: $category, amount: $amount, createdAt: $createdAt, receiptUrl: $receiptUrl, share: $share)';
   }
 
   @override
@@ -247,13 +263,24 @@ class _$ExpenseImpl implements _Expense {
             (identical(other.amount, amount) || other.amount == amount) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
+            (identical(other.receiptUrl, receiptUrl) ||
+                other.receiptUrl == receiptUrl) &&
             const DeepCollectionEquality().equals(other._share, _share));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, uid, userId, name, description,
-      category, amount, createdAt, const DeepCollectionEquality().hash(_share));
+  int get hashCode => Object.hash(
+      runtimeType,
+      uid,
+      userId,
+      name,
+      description,
+      category,
+      amount,
+      createdAt,
+      receiptUrl,
+      const DeepCollectionEquality().hash(_share));
 
   @JsonKey(ignore: true)
   @override
@@ -278,7 +305,8 @@ abstract class _Expense implements Expense {
       final String category,
       required final double amount,
       final DateTime? createdAt,
-      final List<Map<String, int>>? share}) = _$ExpenseImpl;
+      final String? receiptUrl,
+      final Map<String, int>? share}) = _$ExpenseImpl;
 
   factory _Expense.fromJson(Map<String, dynamic> json) = _$ExpenseImpl.fromJson;
 
@@ -297,7 +325,9 @@ abstract class _Expense implements Expense {
   @override
   DateTime? get createdAt;
   @override
-  List<Map<String, int>>? get share;
+  String? get receiptUrl;
+  @override
+  Map<String, int>? get share;
   @override
   @JsonKey(ignore: true)
   _$$ExpenseImplCopyWith<_$ExpenseImpl> get copyWith =>
