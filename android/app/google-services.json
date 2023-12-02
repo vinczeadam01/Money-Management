@@ -12,7 +12,12 @@
           "package_name": "com.example.money_management"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1087034404999-knin1kvefotuun3sjusrobosbb6jhjjp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBwuV96kswkC31TpXMuVVKOXbNhpTQ-OkA"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1087034404999-knin1kvefotuun3sjusrobosbb6jhjjp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1087034404999-4h61npduq4hn7ckdgjsp2d4irk3qsv8e.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.moneyManagement"
+              }
+            }
+          ]
         }
       }
     }
