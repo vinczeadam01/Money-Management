@@ -77,12 +77,14 @@ class _ProfileDetails extends ConsumerStatefulWidget {
 
 class _ProfileDetailsState extends ConsumerState<_ProfileDetails> {
   late final TextEditingController _phoneTextEditingController;
+  late final TextEditingController _nameTextEditingController;
 
   Future<void> _updateProfile() async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     await ref.read(profileControllerProvider.notifier).updateProfile(
           widget.userProfile.copyWith(
             phone: _phoneTextEditingController.text,
+            name: _nameTextEditingController.text,
           ),
         );
     scaffoldMessenger.showSnackBar(
@@ -98,12 +100,16 @@ class _ProfileDetailsState extends ConsumerState<_ProfileDetails> {
     _phoneTextEditingController = TextEditingController(
       text: widget.userProfile.phone,
     );
+    _nameTextEditingController = TextEditingController(
+      text: widget.userProfile.name,
+    );
   }
 
   @override
   void didUpdateWidget(covariant _ProfileDetails oldWidget) {
     super.didUpdateWidget(oldWidget);
     _phoneTextEditingController.text = widget.userProfile.phone ?? '';
+    _nameTextEditingController.text = widget.userProfile.name;
   }
 
   @override
@@ -119,8 +125,20 @@ class _ProfileDetailsState extends ConsumerState<_ProfileDetails> {
       child: Column(
         children: [
           const ProfileAvatar(),
-          Text(
-            widget.user.name,
+          TextField(
+            controller: TextEditingController(
+              text: widget.user.email,
+            ),
+            readOnly: true,
+            decoration: const InputDecoration(
+              labelText: 'Email',
+            ),
+          ),
+          TextField(
+            controller: _nameTextEditingController,
+            decoration: const InputDecoration(
+              labelText: 'Name',
+            ),
           ),
           TextField(
             controller: _phoneTextEditingController,
