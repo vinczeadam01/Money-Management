@@ -7,6 +7,7 @@ import 'package:money_management/features/core/presentation/app_drawer.dart';
 import 'package:money_management/features/friends/application/friend_controller.dart';
 import 'package:money_management/features/friends/infrastructure/providers.dart';
 import 'package:money_management/features/profile/domain/user_profile.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FriendsScreen extends ConsumerWidget {
   const FriendsScreen({
@@ -17,10 +18,11 @@ class FriendsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authControllerProvider);
     final friendRepository = ref.watch(friendRepositoryProvider);
+    final localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Friends'),
+        title: Text(localizations.friends),
       ),
       drawer: const AppDrawer(),
       floatingActionButton: switch (authState) {
@@ -45,52 +47,53 @@ class FriendsScreen extends ConsumerWidget {
   }
 
   void showAddFriendDialog(BuildContext context, WidgetRef ref, List<UserProfile> potentialFriends) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      String friendUid = potentialFriends.isNotEmpty ? potentialFriends[0].uid : '';
-      return AlertDialog(
-        title: const Text('Add Friend'),
-        content: DropdownButtonFormField(
-          value: friendUid,
-          onChanged: (String? newValue) {
-            friendUid = newValue!;
-          },
-          items: potentialFriends.map<DropdownMenuItem<String>>((UserProfile value) {
-            return DropdownMenuItem<String>(
-              value: value.uid,
-              child: Text(value.name),
-            );
-          }).toList(),
-          decoration: const InputDecoration(
-            labelText: 'Friend',
-          ),
-          menuMaxHeight: 300,
-        ),
-        actions: <Widget>[
-          TextButton(
-            child: const Text('Add'),
-            onPressed: () {
-              final friendController = ref.read(friendControllerProvider.notifier);
-              friendController.addFriend(friendUid);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Friend added')),
+    final localizations = AppLocalizations.of(context)!;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        String friendUid = potentialFriends.isNotEmpty ? potentialFriends[0].uid : '';
+        return AlertDialog(
+          title: Text(localizations.addFriend),
+          content: DropdownButtonFormField(
+            value: friendUid,
+            onChanged: (String? newValue) {
+              friendUid = newValue!;
+            },
+            items: potentialFriends.map<DropdownMenuItem<String>>((UserProfile value) {
+              return DropdownMenuItem<String>(
+                value: value.uid,
+                child: Text(value.name),
               );
-              Navigator.of(context).pop(); 
-              return ref.refresh(friendControllerProvider);
-            },
+            }).toList(),
+            decoration: InputDecoration(
+              labelText: localizations.friend,
+            ),
+            menuMaxHeight: 300,
           ),
-          TextButton(
-            child: const Text('Cancel'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
+          actions: <Widget>[
+            TextButton(
+              child: Text(localizations.add),
+              onPressed: () {
+                final friendController = ref.read(friendControllerProvider.notifier);
+                friendController.addFriend(friendUid);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(localizations.friendAdded)),
+                );
+                Navigator.of(context).pop(); 
+                return ref.refresh(friendControllerProvider);
+              },
+            ),
+            TextButton(
+              child: Text(localizations.cancel),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
 class _FriendsScreen extends ConsumerWidget {
@@ -103,12 +106,13 @@ class _FriendsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final friendsAsyncValue = ref.watch(friendControllerProvider);
+    final localizations = AppLocalizations.of(context)!;
     return switch (friendsAsyncValue) {
-      AsyncError() => const Center(
+      AsyncError() => Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Can not load your friends'),
+              Text(localizations.cantLoadFriends),
             ],
           ),
         ),
@@ -139,6 +143,7 @@ class _FriendList extends ConsumerStatefulWidget {
 class _FriendListState extends ConsumerState<_FriendList> {
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -155,15 +160,15 @@ class _FriendListState extends ConsumerState<_FriendList> {
                     trailing: PopupMenuButton(
                       itemBuilder: (context) => [
                         PopupMenuItem(
-                          child: const Text('Delete'),
                           value: friend,
+                          child: Text(localizations.delete),
                         ),
                       ],
                       onSelected: (friend) async {
                         final friendController = ref.read(friendControllerProvider.notifier);
                         friendController.removeFriend(friend.uid);
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Friend deleted')),
+                          SnackBar(content: Text(localizations.friendRemoved)),
                         );
                         return ref.refresh(friendControllerProvider);
                       },

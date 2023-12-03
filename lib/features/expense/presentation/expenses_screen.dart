@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:money_management/features/auth/application/auth_controller.dart';
@@ -43,7 +41,7 @@ class ExpensesScreen extends ConsumerWidget {
 
 
 class _ExpensesListView extends ConsumerWidget {
-  const _ExpensesListView({super.key});
+  const _ExpensesListView();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -71,7 +69,7 @@ class _ExpensesListView extends ConsumerWidget {
                 PopupMenuItem(
                   value: 'edit',
                   enabled: !expense.isShared,
-                  child: Text('Edit'),
+                  child: const Text('Edit'),
                 ),
                 PopupMenuItem(
                   value: 'delete',
@@ -91,7 +89,7 @@ class _ExpensesListView extends ConsumerWidget {
                   );
                 } else if (method == 'delete') {
                   await ref.read(expenseControllerProvider.notifier).deleteExpense(expense);
-                  ref.refresh(expenseControllerProvider);
+                  return ref.refresh(expenseControllerProvider);
                 }
               },
             ),

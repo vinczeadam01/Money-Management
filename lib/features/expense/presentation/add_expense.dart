@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:money_management/features/expense/application/expense_controller.dart';
 import 'package:money_management/features/expense/domain/expense.dart';
 import 'package:money_management/features/profile/domain/user_profile.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddExpense extends ConsumerStatefulWidget {
   AddExpense({
@@ -32,6 +33,7 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
   String? receiptUrl;
 
   Future<void> _addExpense() async {
+    final localizations = AppLocalizations.of(context)!;
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     ref.read(expenseControllerProvider.notifier).addExpense(widget.expense.copyWith(
       name: _nameTextEditingController.text,
@@ -40,8 +42,8 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
       receiptUrl: receiptUrl,
     ));
     scaffoldMessenger.showSnackBar(
-      const SnackBar(
-        content: Text('Saved'),
+      SnackBar(
+        content: Text(localizations.saved),
       ),
     );
     Navigator.of(context).pop();
@@ -50,6 +52,7 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
 
   Future<void> updateExpense() async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final localizations = AppLocalizations.of(context)!;
     ref.read(expenseControllerProvider.notifier).updateExpense(widget.expense.copyWith(
       name: _nameTextEditingController.text,
       description: _descriptionTextEditingController.text,
@@ -57,8 +60,8 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
       receiptUrl: receiptUrl,
     ));
     scaffoldMessenger.showSnackBar(
-      const SnackBar(
-        content: Text('Saved'),
+      SnackBar(
+        content: Text(localizations.saved),
       ),
     );
     Navigator.of(context).pop();
@@ -69,6 +72,7 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
   Future<void> _uploadReceipt() async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final expenseController = ref.read(expenseControllerProvider.notifier);
+    final localizations = AppLocalizations.of(context)!;
     final ImagePicker picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: ImageSource.camera);
     if (image != null) {
@@ -76,16 +80,16 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
       receiptUrl = await expenseController.uploadReceipt(bytes);
       if (receiptUrl != null) {
       scaffoldMessenger.showSnackBar(
-        const SnackBar(
-          content: Text('Receipt uploaded'),
+        SnackBar(
+          content: Text(localizations.receiptUploaded),
         ),
       );
       setState(() {});
       
     } else {
       scaffoldMessenger.showSnackBar(
-        const SnackBar(
-          content: Text('Error uploading receipt'),
+        SnackBar(
+          content: Text(localizations.errorUploadingReceipt),
         ),
       );
     }
@@ -116,7 +120,8 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
 
   @override
   Widget build(BuildContext context) {
-    String appBarTitle = widget.isUpdate ? 'Edit Expense' : 'Add Expense';
+    final localization = AppLocalizations.of(context)!;
+    String appBarTitle = widget.isUpdate ? localization.editExpense : localization.addExpense;
     return Scaffold(
       appBar: AppBar(
         title: Text(appBarTitle),
@@ -140,21 +145,21 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
                   children: [
                     TextFormField(
                       controller: _nameTextEditingController,
-                      decoration: const InputDecoration(
-                        labelText: 'Name',
+                      decoration: InputDecoration(
+                        labelText: localization.name,
                       ),
                     ),
                     TextFormField(
                       controller: _descriptionTextEditingController,
-                      decoration: const InputDecoration(
-                        labelText: 'Description',
+                      decoration: InputDecoration(
+                        labelText: localization.description,
                       ),
                     ),
                     TextFormField(
                       controller: _amountTextEditingController,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'Amount',
+                      decoration: InputDecoration(
+                        labelText: localization.amount,
                       ),
                     ),
                   ],
@@ -173,11 +178,11 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
                     if (receiptUrl != null)
                       Image.network(receiptUrl!),
                     if (receiptUrl == null)
-                      const Text('No receipt uploaded'),
+                      Text(localization.noReceiptUploaded),
                     const Divider(),
                     ElevatedButton(
                       onPressed: _uploadReceipt,
-                      child: const Text('Upload Receipt'),
+                      child: Text(localization.uploadReceipt),
                     ),
                   ],
                 ),
@@ -192,7 +197,7 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: [
-                    const Text('Split with your friends'),
+                     Text(localization.splitWithYourFriends),
                     if (widget.expense.shareWith != null) 
                       for (final item in widget.expense.shareWith!.entries)
                         ListTile(
@@ -201,8 +206,8 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
                         ), 
                     const Divider(),
                     ElevatedButton(
-                      onPressed: showAddSplitDialog,
-                      child: const Text('Split'),
+                      onPressed: () => showAddSplitDialog(localization),
+                      child: Text(localization.split),
                     ),
                   ],
                 ),
@@ -210,7 +215,7 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
             ),
             ElevatedButton(
               onPressed: widget.isUpdate ? updateExpense : _addExpense,
-              child: const Text('Save'),
+              child: Text(localization.save),
             ),
           ],
         ),
@@ -218,14 +223,14 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
     );
   }
 
-  void showAddSplitDialog() {
+  void showAddSplitDialog(AppLocalizations localization) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         String friendUid = widget.friends.isNotEmpty ? widget.friends[0].uid : '';
         String amount = '';
         return AlertDialog(
-          title: const Text('Split your expense'),
+          title: Text(localization.splitYourExpense),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -240,16 +245,16 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
                     child: Text(value.name),
                   );
                 }).toList(),
-                decoration: const InputDecoration(
-                  labelText: 'Friend',
+                decoration: InputDecoration(
+                  labelText: localization.friend,
                 ),
                 menuMaxHeight: 300,
               ),
               TextFormField(
                 controller: TextEditingController(text: amount),
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: 'Amount',
+                decoration: InputDecoration(
+                  labelText: localization.amount,
                 ),
                 onChanged: (String newValue) {
                   amount = newValue;
@@ -259,7 +264,7 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('Add'),
+              child: Text(localization.add),
               onPressed: () {
                 setState(() {
                   widget.expense = widget.expense.copyWith(
@@ -273,7 +278,7 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
               },
             ),
             TextButton(
-              child: const Text('Cancel'),
+              child: Text(localization.cancel),
               onPressed: () {
                 Navigator.of(context).pop();
               },

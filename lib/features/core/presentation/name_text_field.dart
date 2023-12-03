@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NameTextField extends StatelessWidget {
   const NameTextField({
@@ -12,10 +13,11 @@ class NameTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return TextField(
       onChanged: onChanged,
       decoration: InputDecoration(
-        label: const Text('Name'),
+        label: Text(localization.name),
         icon: const Icon(Icons.person),
         errorText: errorText,
       ),

@@ -8,6 +8,7 @@ import 'package:money_management/features/core/presentation/app_drawer.dart';
 import 'package:money_management/features/profile/application/profile_controller.dart';
 import 'package:money_management/features/profile/domain/user_profile.dart';
 import 'package:money_management/features/profile/presentation/profile_avatar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({
@@ -41,13 +42,14 @@ class _ProfileScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final localizations = AppLocalizations.of(context)!;
     final userProfileAsyncValue = ref.watch(profileControllerProvider);
     return switch (userProfileAsyncValue) {
-      AsyncError() => const Center(
+      AsyncError() => Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Can not load your profile'),
+              Text(localizations.canNotLoadProfile),
             ],
           ),
         ),
@@ -81,6 +83,7 @@ class _ProfileDetailsState extends ConsumerState<_ProfileDetails> {
 
   Future<void> _updateProfile() async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final localizations = AppLocalizations.of(context)!;
     await ref.read(profileControllerProvider.notifier).updateProfile(
           widget.userProfile.copyWith(
             phone: _phoneTextEditingController.text,
@@ -88,8 +91,8 @@ class _ProfileDetailsState extends ConsumerState<_ProfileDetails> {
           ),
         );
     scaffoldMessenger.showSnackBar(
-      const SnackBar(
-        content: Text('Saved'),
+      SnackBar(
+        content: Text(localizations.saved),
       ),
     );
   }
@@ -120,6 +123,7 @@ class _ProfileDetailsState extends ConsumerState<_ProfileDetails> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -136,20 +140,20 @@ class _ProfileDetailsState extends ConsumerState<_ProfileDetails> {
           ),
           TextField(
             controller: _nameTextEditingController,
-            decoration: const InputDecoration(
-              labelText: 'Name',
+            decoration: InputDecoration(
+              labelText: localizations.name,
             ),
           ),
           TextField(
             controller: _phoneTextEditingController,
-            decoration: const InputDecoration(
-              labelText: 'Phone',
+            decoration: InputDecoration(
+              labelText: localizations.phone,
             ),
           ),
           const Divider(),
           ElevatedButton(
             onPressed: _updateProfile,
-            child: const Text('Update'),
+            child: Text(localizations.save),
           ),
         ],
       ),

@@ -5,6 +5,7 @@ import 'package:money_management/features/core/presentation/app_drawer.dart';
 import 'package:money_management/features/core/presentation/email_text_field.dart';
 import 'package:money_management/features/core/presentation/password_text_field.dart';
 import 'package:money_management/features/login/application/login_controller.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
@@ -13,18 +14,20 @@ class LoginScreen extends ConsumerWidget {
     final scaffoldMessenger = ScaffoldMessenger.of(ref.context);
     final router = GoRouter.of(ref.context);
     final loginController = ref.read(loginControllerProvider.notifier);
+    final localizations = AppLocalizations.of(ref.context)!;
+
     try {
       await loginController.login();
       scaffoldMessenger.showSnackBar(
-        const SnackBar(
-          content: Text('Welcome back!'),
+        SnackBar(
+          content: Text(localizations.welcomeBack),
         ),
       );
       router.go('/profile');
     } catch (e) {
       scaffoldMessenger.showSnackBar(
-        const SnackBar(
-          content: Text('Failed to login'),
+        SnackBar(
+          content: Text(localizations.failedToLogin),
         ),
       );
     }
@@ -34,18 +37,19 @@ class LoginScreen extends ConsumerWidget {
     final scaffoldMessenger = ScaffoldMessenger.of(ref.context);
     final router = GoRouter.of(ref.context);
     final loginController = ref.read(loginControllerProvider.notifier);
+    final localizations = AppLocalizations.of(ref.context)!;
     try {
       await loginController.loginWithGoogle();
       scaffoldMessenger.showSnackBar(
-        const SnackBar(
-          content: Text('Welcome back!'),
+        SnackBar(
+          content: Text(localizations.welcomeBack),
         ),
       );
       router.go('/profile');
     } catch (e) {
       scaffoldMessenger.showSnackBar(
-        const SnackBar(
-          content: Text('Failed to login'),
+        SnackBar(
+          content: Text(localizations.failedToLogin),
         ),
       );
     }
@@ -54,9 +58,10 @@ class LoginScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final loginForm = ref.watch(loginControllerProvider);
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: Text(localizations.login),
       ),
       drawer: const AppDrawer(),
       body: Column(
@@ -65,7 +70,7 @@ class LoginScreen extends ConsumerWidget {
             Icons.money_outlined,
             size: 128,
           ),
-          const Text('Welcome!'),
+          Text(localizations.welcome),
           EmailTextField(
             onChanged: ref.read(loginControllerProvider.notifier).updateEmail,
             errorText: loginForm.emailErrorText,
@@ -79,14 +84,14 @@ class LoginScreen extends ConsumerWidget {
             onPressed: () {
               _onSubmit(ref);
             },
-            child: const Text('Login'),
+            child: Text(localizations.login),
           ),
           const Divider(),
           ElevatedButton(
             onPressed: () {
               _signInWithGoogle(ref);
             },
-            child: const Text('Sign in with Google'),
+            child: Text(localizations.signInWithGoogle),
           ),
           const Divider(),
           const Text('or'),
@@ -94,7 +99,7 @@ class LoginScreen extends ConsumerWidget {
             onPressed: () {
               context.go('/sign-up');
             },
-            child: const Text('Sign up'),
+            child: Text(localizations.signUp),
           ),
         ],
       ),

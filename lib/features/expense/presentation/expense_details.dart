@@ -4,6 +4,7 @@ import 'package:money_management/features/expense/domain/expense.dart';
 import 'package:money_management/features/profile/domain/user_profile.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ExpenseDetails extends ConsumerWidget {
 
@@ -18,28 +19,28 @@ class ExpenseDetails extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-  
+    final localizations = AppLocalizations.of(context)!;
     
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Expense Details'),
+        title: Text(localizations.expenseDetails),
       ),
       body: ListView(
         children: [
           ListTile(
-            title: const Text('Name'),
+            title: Text(localizations.name),
             subtitle: Text(expense.name),
           ),
           ListTile(
-            title: const Text('Description'),
+            title: Text(localizations.description),
             subtitle: Text(expense.description),
           ),
           ListTile(
-            title: const Text('Amount'),
+            title: Text(localizations.amount),
             subtitle: Text(expense.amount.toString()),
           ),
           if (expense.receiptUrl != null) ListTile(
-            title: const Text('Receipt'),
+            title: Text(localizations.receipt),
             subtitle: GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -55,13 +56,13 @@ class ExpenseDetails extends ConsumerWidget {
           if (expense.shareWith != null) 
             const Divider(),
             if (expense.shareWith != null) 
-            const ListTile(
-            title: Text('Share'),
+            ListTile(
+            title: Text(localizations.share),
             ),
           if (expense.shareWith != null) 
             for (final item in expense.shareWith!.entries)
               ListTile(
-                title: Text(allUser.firstWhere((element) => element!.uid == item.key, orElse: () => UserProfile(uid: '', name: 'Unknown', email: '', phone: '', )).name),
+                title: Text(allUser.firstWhere((element) => element.uid == item.key, orElse: () => const UserProfile(uid: '', name: 'Unknown', email: '', phone: '', )).name),
                 trailing: Text(item.value.toString()),
               ), 
         ],
@@ -73,7 +74,7 @@ class ExpenseDetails extends ConsumerWidget {
 class ZoomableImageScreen extends StatelessWidget {
   final String imageUrl;
 
-  ZoomableImageScreen({required this.imageUrl});
+  const ZoomableImageScreen({super.key, required this.imageUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -93,8 +94,8 @@ class ZoomableImageScreen extends StatelessWidget {
                 maxScale: PhotoViewComputedScale.covered * 2,
               );
             },
-            scrollPhysics: BouncingScrollPhysics(),
-            backgroundDecoration: BoxDecoration(
+            scrollPhysics: const BouncingScrollPhysics(),
+            backgroundDecoration: const BoxDecoration(
               color: Colors.black,
             ),
             pageController: PageController(),

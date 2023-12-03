@@ -29,7 +29,8 @@ class FirebaseAuthRepository extends AuthRepository {
     );
   }
 
-Future<UserCredential> signInWithGoogle() async {
+@override
+  Future<UserCredential> signInWithGoogle() async {
   // Trigger the authentication flow
   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
