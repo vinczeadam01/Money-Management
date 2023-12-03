@@ -18,14 +18,14 @@ _$ExpenseImpl _$$ExpenseImplFromJson(Map<String, dynamic> json) =>
           ? null
           : DateTime.parse(json['createdAt'] as String),
       receiptUrl: json['receiptUrl'] as String?,
-      share: (json['share'] as Map<String, dynamic>?)?.map(
+      shareWith: (json['shareWith'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, e as int),
       ),
+      isShared: json['isShared'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$ExpenseImplToJson(_$ExpenseImpl instance) =>
-    <String, dynamic>{
-      'uid': instance.uid,
+    <String, dynamic>{'uid': instance.uid,
       'userId': instance.userId,
       'name': instance.name,
       'description': instance.description,
@@ -33,5 +33,5 @@ Map<String, dynamic> _$$ExpenseImplToJson(_$ExpenseImpl instance) =>
       'amount': instance.amount,
       'createdAt': instance.createdAt?.toIso8601String(),
       'receiptUrl': instance.receiptUrl,
-      'share': instance.share,
+      'shareWith': instance.shareWith,
     };

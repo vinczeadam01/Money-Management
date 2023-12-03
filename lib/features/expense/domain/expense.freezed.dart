@@ -28,7 +28,8 @@ mixin _$Expense {
   double get amount => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
   String? get receiptUrl => throw _privateConstructorUsedError;
-  Map<String, int>? get share => throw _privateConstructorUsedError;
+  Map<String, int>? get shareWith => throw _privateConstructorUsedError;
+  bool get isShared => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -49,7 +50,8 @@ abstract class $ExpenseCopyWith<$Res> {
       double amount,
       DateTime? createdAt,
       String? receiptUrl,
-      Map<String, int>? share});
+      Map<String, int>? shareWith,
+      bool isShared});
 }
 
 /// @nodoc
@@ -73,7 +75,8 @@ class _$ExpenseCopyWithImpl<$Res, $Val extends Expense>
     Object? amount = null,
     Object? createdAt = freezed,
     Object? receiptUrl = freezed,
-    Object? share = freezed,
+    Object? shareWith = freezed,
+    Object? isShared = null,
   }) {
     return _then(_value.copyWith(
       uid: freezed == uid
@@ -108,10 +111,14 @@ class _$ExpenseCopyWithImpl<$Res, $Val extends Expense>
           ? _value.receiptUrl
           : receiptUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      share: freezed == share
-          ? _value.share
-          : share // ignore: cast_nullable_to_non_nullable
+      shareWith: freezed == shareWith
+          ? _value.shareWith
+          : shareWith // ignore: cast_nullable_to_non_nullable
               as Map<String, int>?,
+      isShared: null == isShared
+          ? _value.isShared
+          : isShared // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -132,7 +139,8 @@ abstract class _$$ExpenseImplCopyWith<$Res> implements $ExpenseCopyWith<$Res> {
       double amount,
       DateTime? createdAt,
       String? receiptUrl,
-      Map<String, int>? share});
+      Map<String, int>? shareWith,
+      bool isShared});
 }
 
 /// @nodoc
@@ -154,7 +162,8 @@ class __$$ExpenseImplCopyWithImpl<$Res>
     Object? amount = null,
     Object? createdAt = freezed,
     Object? receiptUrl = freezed,
-    Object? share = freezed,
+    Object? shareWith = freezed,
+    Object? isShared = null,
   }) {
     return _then(_$ExpenseImpl(
       uid: freezed == uid
@@ -189,10 +198,14 @@ class __$$ExpenseImplCopyWithImpl<$Res>
           ? _value.receiptUrl
           : receiptUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      share: freezed == share
-          ? _value._share
-          : share // ignore: cast_nullable_to_non_nullable
+      shareWith: freezed == shareWith
+          ? _value._shareWith
+          : shareWith // ignore: cast_nullable_to_non_nullable
               as Map<String, int>?,
+      isShared: null == isShared
+          ? _value.isShared
+          : isShared // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -209,8 +222,9 @@ class _$ExpenseImpl implements _Expense {
       required this.amount,
       this.createdAt,
       this.receiptUrl,
-      final Map<String, int>? share})
-      : _share = share;
+      final Map<String, int>? shareWith,
+      this.isShared = false})
+      : _shareWith = shareWith;
 
   factory _$ExpenseImpl.fromJson(Map<String, dynamic> json) =>
       _$$ExpenseImplFromJson(json);
@@ -233,19 +247,23 @@ class _$ExpenseImpl implements _Expense {
   final DateTime? createdAt;
   @override
   final String? receiptUrl;
-  final Map<String, int>? _share;
+  final Map<String, int>? _shareWith;
   @override
-  Map<String, int>? get share {
-    final value = _share;
+  Map<String, int>? get shareWith {
+    final value = _shareWith;
     if (value == null) return null;
-    if (_share is EqualUnmodifiableMapView) return _share;
+    if (_shareWith is EqualUnmodifiableMapView) return _shareWith;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableMapView(value);
   }
 
   @override
+  @JsonKey()
+  final bool isShared;
+
+  @override
   String toString() {
-    return 'Expense(uid: $uid, userId: $userId, name: $name, description: $description, category: $category, amount: $amount, createdAt: $createdAt, receiptUrl: $receiptUrl, share: $share)';
+    return 'Expense(uid: $uid, userId: $userId, name: $name, description: $description, category: $category, amount: $amount, createdAt: $createdAt, receiptUrl: $receiptUrl, shareWith: $shareWith, isShared: $isShared)';
   }
 
   @override
@@ -265,7 +283,10 @@ class _$ExpenseImpl implements _Expense {
                 other.createdAt == createdAt) &&
             (identical(other.receiptUrl, receiptUrl) ||
                 other.receiptUrl == receiptUrl) &&
-            const DeepCollectionEquality().equals(other._share, _share));
+            const DeepCollectionEquality()
+                .equals(other._shareWith, _shareWith) &&
+            (identical(other.isShared, isShared) ||
+                other.isShared == isShared));
   }
 
   @JsonKey(ignore: true)
@@ -280,7 +301,8 @@ class _$ExpenseImpl implements _Expense {
       amount,
       createdAt,
       receiptUrl,
-      const DeepCollectionEquality().hash(_share));
+      const DeepCollectionEquality().hash(_shareWith),
+      isShared);
 
   @JsonKey(ignore: true)
   @override
@@ -306,7 +328,8 @@ abstract class _Expense implements Expense {
       required final double amount,
       final DateTime? createdAt,
       final String? receiptUrl,
-      final Map<String, int>? share}) = _$ExpenseImpl;
+      final Map<String, int>? shareWith,
+      final bool isShared}) = _$ExpenseImpl;
 
   factory _Expense.fromJson(Map<String, dynamic> json) = _$ExpenseImpl.fromJson;
 
@@ -327,7 +350,9 @@ abstract class _Expense implements Expense {
   @override
   String? get receiptUrl;
   @override
-  Map<String, int>? get share;
+  Map<String, int>? get shareWith;
+  @override
+  bool get isShared;
   @override
   @JsonKey(ignore: true)
   _$$ExpenseImplCopyWith<_$ExpenseImpl> get copyWith =>

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:money_management/features/auth/application/auth_controller.dart';
@@ -5,7 +7,9 @@ import 'package:money_management/features/auth/domain/auth_state.dart';
 import 'package:money_management/features/core/presentation/app_drawer.dart';
 import 'package:money_management/features/expense/application/expense_controller.dart';
 import 'package:money_management/features/expense/presentation/add_expense.dart';
+import 'package:money_management/features/expense/presentation/expense_details.dart';
 import 'package:money_management/features/friends/infrastructure/providers.dart';
+import 'package:money_management/features/profile/infrastructure/providers.dart';
 
 
 class ExpensesScreen extends ConsumerWidget {
@@ -21,23 +25,18 @@ class ExpensesScreen extends ConsumerWidget {
       ),
       drawer: const AppDrawer(),
       body: const _ExpensesListView(),
-      floatingActionButton: switch (authState) {
-        Unknown() || Unauthenticated() => const Center(
-            child: CircularProgressIndicator(),
-          ),
-        Authenticated(:final user) => FloatingActionButton(
-          onPressed: () async {
-            final friends = await friendRepository.getFriends(user.uid);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => AddExpense(friends: friends),
-              ),
-            );
-          },
-          child: const Icon(Icons.add),
-        )
-      },
+      floatingActionButton: authState is Authenticated ? FloatingActionButton(
+        onPressed: () async {
+          final friends = await friendRepository.getFriends(authState.user.uid);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddExpense(friends: friends),
+            ),
+          );
+        },
+        child: const Icon(Icons.add),
+      ) : null,
     );
   }
 }
@@ -49,6 +48,7 @@ class _ExpensesListView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncExpenses = ref.watch(expenseControllerProvider);
+    final authState = ref.watch(authControllerProvider);
 
     return switch (asyncExpenses) {
       AsyncData(:final value) => ListView.builder(
@@ -56,20 +56,54 @@ class _ExpensesListView extends ConsumerWidget {
         itemBuilder: (context, index) {
           final expense = value[index];
           return ListTile(
-            title: Text(expense.name),
+            title: Row(
+              children: [
+                Text(expense.name),
+                if (expense.isShared) const Padding(
+                  padding: EdgeInsets.only(left: 8.0),
+                  child: Icon(Icons.people),
+                ),
+              ],
+            ),
             subtitle: Text(expense.amount.toString()),
             trailing: PopupMenuButton(
               itemBuilder: (context) => [
                 PopupMenuItem(
+                  value: 'edit',
+                  enabled: !expense.isShared,
+                  child: Text('Edit'),
+                ),
+                PopupMenuItem(
+                  value: 'delete',
+                  enabled: !expense.isShared,
                   child: const Text('Delete'),
-                  value: expense,
                 ),
               ],
-              onSelected: (expense) async {
-                await ref.read(expenseControllerProvider.notifier).deleteExpense(expense);
-                ref.refresh(expenseControllerProvider);
+              onSelected: (method) async {
+                if (method == 'edit' && authState is Authenticated) {
+                  final friends = await ref.read(friendRepositoryProvider).getFriends(authState.user.uid);
+                  // ignore: use_build_context_synchronously
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddExpense(expense: expense, friends: friends, isUpdate: true),
+                    ),
+                  );
+                } else if (method == 'delete') {
+                  await ref.read(expenseControllerProvider.notifier).deleteExpense(expense);
+                  ref.refresh(expenseControllerProvider);
+                }
               },
             ),
+            onTap: () async {
+              final allUser = await ref.read(profileRepositoryProvider).getAllUser();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ExpenseDetails(expense: expense, allUser: allUser),
+                ),
+              );
+            }
           );
         },
       ),

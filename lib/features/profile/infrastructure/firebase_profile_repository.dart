@@ -52,6 +52,14 @@ class FirebaseProfileRepository extends ProfileRepository {
         .set(profile);
     return profile;
   }
+  
+  @override
+  Future<List<UserProfile>> getAllUser() async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection(_userProfileCollection)
+        .get();
+    return snapshot.docs.map((doc) => UserProfile.fromJson(doc.data())).toList();
+  }
 }
 
 UserProfile _userProfileFromFirestore(

@@ -15,15 +15,18 @@ abstract class Expense with _$Expense {
     required double amount,
     DateTime? createdAt,
     String? receiptUrl,
-    Map<String, int>? share,
+    Map<String, int>? shareWith,
+    @Default(false) bool isShared
   }) = _Expense;
 
 
-  factory Expense.fromDoc(QueryDocumentSnapshot<Map<String, dynamic>> documentSnapshot) {
-    var exponse = _$ExpenseFromJson(documentSnapshot.data());
-    exponse = exponse.copyWith(uid: documentSnapshot.id);
-    return exponse;
+  factory Expense.fromDoc(QueryDocumentSnapshot<Map<String, dynamic>> documentSnapshot, {bool isShared = false}) {
+    var expense = _$ExpenseFromJson(documentSnapshot.data());
+    expense = expense.copyWith(uid: documentSnapshot.id, isShared: isShared);
+    return expense;
   }
+
+  factory Expense.fromJson(Map<String, dynamic> json) => _$ExpenseFromJson(json);
       
 }
 

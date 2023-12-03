@@ -24,14 +24,25 @@ class FirebaseExpenseRepository extends ExpenseRepository {
   }
 
   @override
-  Future<List<Expense>> getExpenses(String userId) {
-    // the document id is the uid of the expense
-    return _db
+  Future<List<Expense>> getExpenses(String userId) async {
+    final ownExpensesDocuments =  _db
       .collection(_expenseCollection)
       .where('userId', isEqualTo: userId)
-      .get()
-      .then((snapshot) {
-        return snapshot.docs.map((doc) => Expense.fromDoc(doc)).toList();
+      .get();
+
+    final sharedExpensesDocuments = _db
+      .collection(_expenseCollection)
+      .where('shareWith.$userId', isGreaterThan: 0)
+      .get();
+
+    return Future.wait([ownExpensesDocuments, sharedExpensesDocuments])
+      .then((value) {
+        final ownExpenses = value[0].docs.map((doc) => Expense.fromDoc(doc)).toList();
+        final sharedExpenses = value[1].docs.map((doc) => Expense.fromDoc(doc, isShared: true)).toList();
+        final allExpenses = [...ownExpenses, ...sharedExpenses];
+
+        allExpenses.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
+        return allExpenses;
       });
   }
 

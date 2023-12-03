@@ -9,14 +9,17 @@ class AddExpense extends ConsumerStatefulWidget {
   AddExpense({
     super.key, 
     required this.friends,
+    this.expense = const Expense(
+      name: '',
+      description: '',
+      amount: 0,
+    ),
+    this.isUpdate = false,
   });
 
   final List<UserProfile> friends;
-  Expense expense = const Expense(
-    name: '',
-    description: '',
-    amount: 0,
-  );
+  Expense expense;
+  final isUpdate;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _AddExpenseState();
@@ -44,6 +47,24 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
     Navigator.of(context).pop();
     return ref.refresh(expenseControllerProvider);
   }
+
+  Future<void> updateExpense() async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    ref.read(expenseControllerProvider.notifier).updateExpense(widget.expense.copyWith(
+      name: _nameTextEditingController.text,
+      description: _descriptionTextEditingController.text,
+      amount: double.parse(_amountTextEditingController.text),
+      receiptUrl: receiptUrl,
+    ));
+    scaffoldMessenger.showSnackBar(
+      const SnackBar(
+        content: Text('Saved'),
+      ),
+    );
+    Navigator.of(context).pop();
+    return ref.refresh(expenseControllerProvider);
+  }
+
 
   Future<void> _uploadReceipt() async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
@@ -95,9 +116,10 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
 
   @override
   Widget build(BuildContext context) {
+    String appBarTitle = widget.isUpdate ? 'Edit Expense' : 'Add Expense';
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Expense'),
+        title: Text(appBarTitle),
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
           icon: const Icon(Icons.close),
@@ -171,8 +193,8 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
                 child: Column(
                   children: [
                     const Text('Split with your friends'),
-                    if (widget.expense.share != null) 
-                      for (final item in widget.expense.share!.entries)
+                    if (widget.expense.shareWith != null) 
+                      for (final item in widget.expense.shareWith!.entries)
                         ListTile(
                           title: Text(widget.friends.firstWhere((element) => element.uid == item.key).name),
                           trailing: Text(item.value.toString()),
@@ -187,7 +209,7 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
               ),
             ),
             ElevatedButton(
-              onPressed: _addExpense,
+              onPressed: widget.isUpdate ? updateExpense : _addExpense,
               child: const Text('Save'),
             ),
           ],
@@ -205,6 +227,7 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
         return AlertDialog(
           title: const Text('Split your expense'),
           content: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               DropdownButtonFormField(
                 value: friendUid,
@@ -240,8 +263,8 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
               onPressed: () {
                 setState(() {
                   widget.expense = widget.expense.copyWith(
-                    share: {
-                      ...widget.expense.share ?? {},
+                    shareWith: {
+                      ...widget.expense.shareWith ?? {},
                       friendUid: int.parse(amount),
                     },
                   );

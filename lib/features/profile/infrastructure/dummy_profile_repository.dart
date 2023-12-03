@@ -25,4 +25,10 @@ class DummyProfileRepository extends ProfileRepository {
   Future<UserProfile> updateProfile(UserProfile profile) async {
     return profile;
   }
+  
+  @override
+  Future<List<UserProfile>> getAllUser() {
+    // TODO: implement getAllUser
+    throw UnimplementedError();
+  }
 }

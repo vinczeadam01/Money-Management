@@ -35,6 +35,11 @@ class ExpenseController extends AsyncNotifier<List<Expense>> {
     }
   }
 
+  void updateExpense(Expense expense) async {
+    final expenseRepository = ref.read(ExpenseRepositoryProvider);
+    await expenseRepository.updateExpense(expense);
+  }
+
   Future<void> deleteExpense(Expense expense) async {
     final expenseRepository = ref.read(ExpenseRepositoryProvider);
     await expenseRepository.deleteExpense(expense);
