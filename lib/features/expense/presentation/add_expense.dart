@@ -8,7 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddExpense extends ConsumerStatefulWidget {
   AddExpense({
-    super.key, 
+    super.key,
     required this.friends,
     this.expense = const Expense(
       name: '',
@@ -35,12 +35,14 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
   Future<void> _addExpense() async {
     final localizations = AppLocalizations.of(context)!;
     final scaffoldMessenger = ScaffoldMessenger.of(context);
-    ref.read(expenseControllerProvider.notifier).addExpense(widget.expense.copyWith(
-      name: _nameTextEditingController.text,
-      description: _descriptionTextEditingController.text,
-      amount: double.parse(_amountTextEditingController.text),
-      receiptUrl: receiptUrl,
-    ));
+    ref
+        .read(expenseControllerProvider.notifier)
+        .addExpense(widget.expense.copyWith(
+          name: _nameTextEditingController.text,
+          description: _descriptionTextEditingController.text,
+          amount: double.parse(_amountTextEditingController.text),
+          receiptUrl: receiptUrl,
+        ));
     scaffoldMessenger.showSnackBar(
       SnackBar(
         content: Text(localizations.saved),
@@ -53,12 +55,14 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
   Future<void> updateExpense() async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final localizations = AppLocalizations.of(context)!;
-    ref.read(expenseControllerProvider.notifier).updateExpense(widget.expense.copyWith(
-      name: _nameTextEditingController.text,
-      description: _descriptionTextEditingController.text,
-      amount: double.parse(_amountTextEditingController.text),
-      receiptUrl: receiptUrl,
-    ));
+    ref
+        .read(expenseControllerProvider.notifier)
+        .updateExpense(widget.expense.copyWith(
+          name: _nameTextEditingController.text,
+          description: _descriptionTextEditingController.text,
+          amount: double.parse(_amountTextEditingController.text),
+          receiptUrl: receiptUrl,
+        ));
     scaffoldMessenger.showSnackBar(
       SnackBar(
         content: Text(localizations.saved),
@@ -67,7 +71,6 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
     Navigator.of(context).pop();
     return ref.refresh(expenseControllerProvider);
   }
-
 
   Future<void> _uploadReceipt() async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
@@ -79,21 +82,20 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
       final bytes = await image.readAsBytes();
       receiptUrl = await expenseController.uploadReceipt(bytes);
       if (receiptUrl != null) {
-      scaffoldMessenger.showSnackBar(
-        SnackBar(
-          content: Text(localizations.receiptUploaded),
-        ),
-      );
-      setState(() {});
-      
-    } else {
-      scaffoldMessenger.showSnackBar(
-        SnackBar(
-          content: Text(localizations.errorUploadingReceipt),
-        ),
-      );
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text(localizations.receiptUploaded),
+          ),
+        );
+        setState(() {});
+      } else {
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text(localizations.errorUploadingReceipt),
+          ),
+        );
+      }
     }
-    }    
   }
 
   @override
@@ -121,103 +123,138 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
-    String appBarTitle = widget.isUpdate ? localization.editExpense : localization.addExpense;
+    String appBarTitle =
+        widget.isUpdate ? localization.editExpense : localization.addExpense;
     return Scaffold(
       appBar: AppBar(
-        title: Text(appBarTitle),
-        leading: IconButton(
-          onPressed: () => Navigator.of(context).pop(),
-          icon: const Icon(Icons.close),
-        )
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
+          title: Text(appBarTitle),
+          leading: IconButton(
+            onPressed: () => Navigator.of(context).pop(),
+            icon: const Icon(Icons.close),
+          )),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Flex(
+            direction: Axis.horizontal,
+            children: [
+              Expanded(
+                  child: Column(
                   children: [
-                    TextFormField(
-                      controller: _nameTextEditingController,
-                      decoration: InputDecoration(
-                        labelText: localization.name,
+                    Card(
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              controller: _nameTextEditingController,
+                              decoration: InputDecoration(
+                                labelText: localization.name,
+                              ),
+                            ),
+                            TextFormField(
+                              controller: _descriptionTextEditingController,
+                              decoration: InputDecoration(
+                                labelText: localization.description,
+                              ),
+                            ),
+                            TextFormField(
+                              controller: _amountTextEditingController,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                labelText: localization.amount,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    TextFormField(
-                      controller: _descriptionTextEditingController,
-                      decoration: InputDecoration(
-                        labelText: localization.description,
+                    MediaQuery.of(context).orientation == Orientation.portrait ? Card(
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          children: [
+                            if (receiptUrl != null) Image.network(receiptUrl!),
+                            if (receiptUrl == null)
+                              Text(localization.noReceiptUploaded),
+                            const Divider(),
+                            ElevatedButton(
+                              onPressed: _uploadReceipt,
+                              child: Text(localization.uploadReceipt),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ) : Container(),
+                    Card(
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          children: [
+                            Text(localization.splitWithYourFriends),
+                            if (widget.expense.shareWith != null)
+                              for (final item
+                                  in widget.expense.shareWith!.entries)
+                                ListTile(
+                                  title: Text(widget.friends
+                                      .firstWhere(
+                                          (element) => element.uid == item.key)
+                                      .name),
+                                  trailing: Text(item.value.toString()),
+                                ),
+                            const Divider(),
+                            ElevatedButton(
+                              onPressed: () => showAddSplitDialog(localization),
+                              child: Text(localization.split),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    TextFormField(
-                      controller: _amountTextEditingController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelText: localization.amount,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    if (receiptUrl != null)
-                      Image.network(receiptUrl!),
-                    if (receiptUrl == null)
-                      Text(localization.noReceiptUploaded),
-                    const Divider(),
                     ElevatedButton(
-                      onPressed: _uploadReceipt,
-                      child: Text(localization.uploadReceipt),
+                      onPressed: widget.isUpdate ? updateExpense : _addExpense,
+                      child: Text(localization.save),
                     ),
                   ],
-                ),
+                )
               ),
-            ),
-            Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                     Text(localization.splitWithYourFriends),
-                    if (widget.expense.shareWith != null) 
-                      for (final item in widget.expense.shareWith!.entries)
-                        ListTile(
-                          title: Text(widget.friends.firstWhere((element) => element.uid == item.key).name),
-                          trailing: Text(item.value.toString()),
-                        ), 
-                    const Divider(),
-                    ElevatedButton(
-                      onPressed: () => showAddSplitDialog(localization),
-                      child: Text(localization.split),
+              MediaQuery.of(context).orientation == Orientation.landscape ? Expanded(
+                child: Card(
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          children: [
+                            if (receiptUrl != null) Image.network(receiptUrl!),
+                            if (receiptUrl == null)
+                              Text(localization.noReceiptUploaded),
+                            const Divider(),
+                            ElevatedButton(
+                              onPressed: _uploadReceipt,
+                              child: Text(localization.uploadReceipt),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                  ],
-                ),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: widget.isUpdate ? updateExpense : _addExpense,
-              child: Text(localization.save),
-            ),
-          ],
+              ) : Container(),
+            ],
+          ),
         ),
       ),
     );
@@ -227,7 +264,8 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        String friendUid = widget.friends.isNotEmpty ? widget.friends[0].uid : '';
+        String friendUid =
+            widget.friends.isNotEmpty ? widget.friends[0].uid : '';
         String amount = '';
         return AlertDialog(
           title: Text(localization.splitYourExpense),
@@ -239,7 +277,8 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
                 onChanged: (String? newValue) {
                   friendUid = newValue!;
                 },
-                items: widget.friends.map<DropdownMenuItem<String>>((UserProfile value) {
+                items: widget.friends
+                    .map<DropdownMenuItem<String>>((UserProfile value) {
                   return DropdownMenuItem<String>(
                     value: value.uid,
                     child: Text(value.name),
@@ -288,5 +327,4 @@ class _AddExpenseState extends ConsumerState<AddExpense> {
       },
     );
   }
-
 }
