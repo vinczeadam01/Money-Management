@@ -31,10 +31,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           return '/login';
         case Authenticated():
           if (isSplash) {
-            return '/profile';
+            return '/home';
           }
           if (isLoggingIn) {
-            return '/profile';
+            return '/home';
           }
 
           return null;

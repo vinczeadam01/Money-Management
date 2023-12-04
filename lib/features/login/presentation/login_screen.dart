@@ -23,7 +23,7 @@ class LoginScreen extends ConsumerWidget {
           content: Text(localizations.welcomeBack),
         ),
       );
-      router.go('/profile');
+      router.go('/home');
     } catch (e) {
       scaffoldMessenger.showSnackBar(
         SnackBar(
@@ -45,7 +45,7 @@ class LoginScreen extends ConsumerWidget {
           content: Text(localizations.welcomeBack),
         ),
       );
-      router.go('/profile');
+      router.go('/home');
     } catch (e) {
       scaffoldMessenger.showSnackBar(
         SnackBar(
