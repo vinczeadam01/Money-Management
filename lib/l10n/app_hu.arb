@@ -36,5 +36,8 @@
     "signInWithGoogle": "Belépés google-vel",
     "avatarUpdated": "Profilkép felöltve",
     "canNotLoadProfile": "Nem sikerült betölteni a profilképet",
-    "phone": "Telefon"
+    "phone": "Telefon",
+    "youHaveNoExpensesYet": "Nincs még költésed!",
+    "expenses": "Költések",
+    "edit": "Módosítás"
 }

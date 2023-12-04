@@ -8,6 +8,8 @@ import 'package:money_management/features/expense/presentation/add_expense.dart'
 import 'package:money_management/features/expense/presentation/expense_details.dart';
 import 'package:money_management/features/friends/infrastructure/providers.dart';
 import 'package:money_management/features/profile/infrastructure/providers.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 
 class ExpensesScreen extends ConsumerWidget {
@@ -17,9 +19,10 @@ class ExpensesScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref)  {
     final friendRepository = ref.watch(friendRepositoryProvider);
     final authState = ref.watch(authControllerProvider);
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Expenses'),
+        title: Text(localization.expenses),
       ),
       drawer: const AppDrawer(),
       body: const _ExpensesListView(),
@@ -47,9 +50,10 @@ class _ExpensesListView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncExpenses = ref.watch(expenseControllerProvider);
     final authState = ref.watch(authControllerProvider);
+    final localization = AppLocalizations.of(context)!;
 
     return switch (asyncExpenses) {
-      AsyncData(:final value) => ListView.builder(
+      AsyncData(:final value) => value.isEmpty ? Center(child: Text(localization.youHaveNoExpensesYet)) : ListView.builder(
         itemCount: value.length,
         itemBuilder: (context, index) {
           final expense = value[index];
@@ -69,12 +73,12 @@ class _ExpensesListView extends ConsumerWidget {
                 PopupMenuItem(
                   value: 'edit',
                   enabled: !expense.isShared,
-                  child: const Text('Edit'),
+                  child: Text(localization.edit),
                 ),
                 PopupMenuItem(
                   value: 'delete',
                   enabled: !expense.isShared,
-                  child: const Text('Delete'),
+                  child: Text(localization.delete),
                 ),
               ],
               onSelected: (method) async {

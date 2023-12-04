@@ -36,6 +36,10 @@ class FirebaseFriendRepository implements FriendRepository {
         .map((doc) => doc.id)
         .toList();
 
+      if (friendIds.isEmpty) {
+        return [];
+      }
+
       final friendsSnapshot = await _db.collection('users').where(FieldPath.documentId, whereIn: friendIds).get();
       
       final friends = friendsSnapshot.docs.map((doc) => UserProfile.fromJson(doc.data())).toList();

@@ -36,5 +36,8 @@
     "signInWithGoogle": "Sign in with google",
     "avatarUpdated": "Avatar updated",
     "canNotLoadProfile": "Can't load your profile",
-    "phone": "Phone"
+    "phone": "Phone",
+    "youHaveNoExpensesYet": "You have no expenses yet!",
+    "expenses": "Expenses",
+    "edit": "Edit"
 }
