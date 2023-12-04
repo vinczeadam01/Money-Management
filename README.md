@@ -1,6 +1,14 @@
-# money_management
+# Money management app
 
-A new Flutter project.
+An expense tracker flutter application
+
+## Installation
+
+Copy the environment file and set the credentials
+
+```
+cp lib/env.dart.example lib/env.dart
+```
 
 ## Getting Started
 
